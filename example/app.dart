@@ -3,18 +3,17 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'dart:async';
-import 'dart:js_interop';
+import 'dart:html';
 
 import 'package:markdown/markdown.dart' as md;
-import 'package:web/web.dart';
 
 import 'highlight.dart';
 
-final markdownInput =
-    document.querySelector('#markdown') as HTMLTextAreaElement;
-final htmlDiv = document.querySelector('#html') as HTMLDivElement;
-final versionSpan = document.querySelector('.version') as HTMLSpanElement;
+final markdownInput = querySelector('#markdown') as TextAreaElement;
+final htmlDiv = querySelector('#html') as DivElement;
+final versionSpan = querySelector('.version') as SpanElement;
 
+final nullSanitizer = NullTreeSanitizer();
 const typing = Duration(milliseconds: 150);
 const introText = '''Markdown is the **best**!
 
@@ -27,10 +26,9 @@ const introText = '''Markdown is the **best**!
 * ...and _so much more_...''';
 
 // Flavor support.
-final basicRadio = document.querySelector('#basic-radio') as HTMLElement;
-final commonmarkRadio =
-    document.querySelector('#commonmark-radio') as HTMLElement;
-final gfmRadio = document.querySelector('#gfm-radio') as HTMLElement;
+final basicRadio = querySelector('#basic-radio') as HtmlElement;
+final commonmarkRadio = querySelector('#commonmark-radio') as HtmlElement;
+final gfmRadio = querySelector('#gfm-radio') as HtmlElement;
 md.ExtensionSet? extensionSet;
 
 final extensionSets = {
@@ -56,7 +54,7 @@ void main() {
   }
 
   // GitHub is the default extension set.
-  gfmRadio.attributes.getNamedItem('checked')?.value = '';
+  gfmRadio.attributes['checked'] = '';
   gfmRadio.querySelector('.glyph')!.text = 'radio_button_checked';
   extensionSet = extensionSets[gfmRadio.id];
   _renderMarkdown();
@@ -67,16 +65,19 @@ void main() {
 }
 
 void _renderMarkdown([Event? event]) {
-  final markdown = markdownInput.value;
+  final markdown = markdownInput.value!;
 
-  htmlDiv.innerHTML = md.markdownToHtml(markdown, extensionSet: extensionSet);
+  htmlDiv.setInnerHtml(
+    md.markdownToHtml(markdown, extensionSet: extensionSet),
+    treeSanitizer: nullSanitizer,
+  );
 
-  for (final block in htmlDiv.querySelectorAll('pre code').items) {
+  for (final block in htmlDiv.querySelectorAll('pre code')) {
     try {
       highlightElement(block);
     } catch (e) {
-      console.error('Error highlighting markdown:'.toJS);
-      console.error(e.toString().toJS);
+      window.console.error('Error highlighting markdown:');
+      window.console.error(e);
     }
   }
 
@@ -106,36 +107,29 @@ void _typeItOut(String msg, int pos) {
 }
 
 void _switchFlavor(Event e) {
-  final target = e.currentTarget as HTMLElement;
-  if (target.attributes.getNamedItem('checked') == null) {
+  final target = e.currentTarget as HtmlElement;
+  if (!target.attributes.containsKey('checked')) {
     if (basicRadio != target) {
-      basicRadio.attributes.safeRemove('checked');
+      basicRadio.attributes.remove('checked');
       basicRadio.querySelector('.glyph')!.text = 'radio_button_unchecked';
     }
     if (commonmarkRadio != target) {
-      commonmarkRadio.attributes.safeRemove('checked');
+      commonmarkRadio.attributes.remove('checked');
       commonmarkRadio.querySelector('.glyph')!.text = 'radio_button_unchecked';
     }
     if (gfmRadio != target) {
-      gfmRadio.attributes.safeRemove('checked');
+      gfmRadio.attributes.remove('checked');
       gfmRadio.querySelector('.glyph')!.text = 'radio_button_unchecked';
     }
 
-    target.attributes.getNamedItem('checked')?.value = '';
+    target.attributes['checked'] = '';
     target.querySelector('.glyph')!.text = 'radio_button_checked';
     extensionSet = extensionSets[target.id];
     _renderMarkdown();
   }
 }
 
-extension on NodeList {
-  List<Node> get items => [
-        for (var i = 0; i < length; i++) item(i)!,
-      ];
-}
-
-extension on NamedNodeMap {
-  void safeRemove(String qualifiedName) {
-    if (getNamedItem(qualifiedName) != null) removeNamedItem(qualifiedName);
-  }
+class NullTreeSanitizer implements NodeTreeSanitizer {
+  @override
+  void sanitizeTree(Node node) {}
 }

@@ -1,9 +1,3 @@
-## 7.2.2
-
-* Fix a crash parsing alert block syntax (#584).
-* Have alert block syntax support multiple paragraphs (#577).
-* Require Dart `^3.2.0`.
-
 ## 7.2.1
 
 * Address a termination issue with GitHub alert syntax parsing.

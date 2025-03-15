@@ -20,6 +20,7 @@
   "79": "strict"
  },
  "Autolinks": {
+  "593": "strict",
   "594": "strict",
   "595": "strict",
   "596": "strict",
@@ -37,8 +38,7 @@
   "608": "strict",
   "609": "strict",
   "610": "strict",
-  "611": "strict",
-  "612": "strict"
+  "611": "strict"
  },
  "Backslash escapes": {
   "12": "strict",
@@ -114,7 +114,7 @@
   "351": "strict",
   "352": "strict",
   "353": "strict",
-  "354": "fail",
+  "354": "strict",
   "355": "strict",
   "356": "strict",
   "357": "strict",
@@ -240,8 +240,7 @@
   "477": "strict",
   "478": "strict",
   "479": "strict",
-  "480": "strict",
-  "481": "strict"
+  "480": "strict"
  },
  "Entity and numeric character references": {
   "25": "loose",
@@ -357,6 +356,7 @@
   "191": "strict"
  },
  "Images": {
+  "571": "strict",
   "572": "strict",
   "573": "strict",
   "574": "strict",
@@ -377,8 +377,7 @@
   "589": "strict",
   "590": "strict",
   "591": "strict",
-  "592": "strict",
-  "593": "strict"
+  "592": "strict"
  },
  "Indented code blocks": {
   "107": "strict",
@@ -427,6 +426,7 @@
   "218": "strict"
  },
  "Links": {
+  "481": "strict",
   "482": "strict",
   "483": "strict",
   "484": "strict",
@@ -515,8 +515,7 @@
   "567": "strict",
   "568": "strict",
   "569": "strict",
-  "570": "strict",
-  "571": "strict"
+  "570": "strict"
  },
  "List items": {
   "253": "strict",
@@ -610,6 +609,7 @@
   "42": "strict"
  },
  "Raw HTML": {
+  "612": "strict",
   "613": "strict",
   "614": "strict",
   "615": "strict",
@@ -622,8 +622,8 @@
   "622": "strict",
   "623": "strict",
   "624": "strict",
-  "625": "loose",
-  "626": "loose",
+  "625": "strict",
+  "626": "strict",
   "627": "strict",
   "628": "strict",
   "629": "strict",
